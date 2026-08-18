@@ -1,6 +1,6 @@
 {
 	"name": "@otr-app/branch-sdk",
-	"version": "2.74.1",
+	"version": "2.74.2",
 	"description": "Branch Metrics Deep Linking/Smart Banner Web SDK",
 	"main": "dist/build.min.js",
 	"files": [

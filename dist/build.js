@@ -1072,7 +1072,7 @@ goog.json.Serializer.prototype.serializeObject_ = function(a, b) {
   b.push("}");
 };
 // Input 2
-var config = {app_service_endpoint:"https://relay.offtherecord.com:444/app-link", link_service_endpoint:"https://fight.offtherecord.com", api_endpoint:"https://relay.offtherecord.com:444", version:"2.74.0"};
+var config = {app_service_endpoint:"https://capi.offtherecord.com/app-link", link_service_endpoint:"https://fight.offtherecord.com", api_endpoint:"https://capi.offtherecord.com", version:"2.74.0"};
 // Input 3
 var safejson = {parse:function(a) {
   a = String(a);
@@ -2023,7 +2023,7 @@ Server.prototype.request = function(a, b, c, d) {
 };
 // Input 8
 var banner_utils = {animationSpeed:250, animationDelay:20, bannerHeight:"76px", error_timeout:2000, removeElement:function(a) {
-  a && a.parentNode.removeChild(a);
+  a && a.parentNode && a.parentNode.removeChild(a);
 }, hasClass:function(a, b) {
   return !!a.className.match(new RegExp("(\\s|^)" + b + "(\\s|$)"));
 }, addClass:function(a, b) {

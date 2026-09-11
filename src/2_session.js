@@ -62,15 +62,24 @@ session.update = function(storage, newData) {
  * @param {boolean=} removeNull delete null or undefined entries instead of inserting
  */
 session.patch = function(storage, data, updateLocalStorage, removeNull) {
+	var parseStoredSession = function(source) {
+		try {
+			var parsed = safejson.parse(source);
+			return parsed && typeof parsed === 'object' ? parsed : {};
+		}
+		catch (e) {
+			return {};
+		}
+	};
 	var merge = function(source, patch) {
-		return utils.encodeBFPs(utils.merge(safejson.parse(source), patch, removeNull));
+		return utils.encodeBFPs(utils.merge(parseStoredSession(source), patch, removeNull));
 	};
 
-	var session = storage.get('branch_session', false) || {};
+	var session = storage.get('branch_session', false) || '{}';
 	storage.set('branch_session', goog.json.serialize(merge(session, data)));
 
 	if (updateLocalStorage) {
-		var sessionFirst = storage.get('branch_session_first', true) || {};
+		var sessionFirst = storage.get('branch_session_first', true) || '{}';
 		storage.set('branch_session_first', goog.json.serialize(merge(sessionFirst, data)), true);
 	}
 };

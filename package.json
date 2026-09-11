@@ -1,6 +1,6 @@
 {
 	"name": "@otr-app/branch-sdk",
-	"version": "2.74.2",
+	"version": "2.74.3",
 	"description": "Branch Metrics Deep Linking/Smart Banner Web SDK",
 	"main": "dist/build.min.js",
 	"files": [
@@ -47,7 +47,7 @@
 		"google-closure-deps": "^20230103.0.0",
 		"google-closure-library": "^20230103.0.0"
 	},
-	"build": "2.71.0",
+	"build": "2.74.3",
 	"config": {
 		"commitizen": {
 			"path": "./node_modules/cz-customizable"

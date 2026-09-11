@@ -2132,9 +2132,9 @@ var session = {get:function(a, b) {
 }, patch:function(a, b, c, d) {
   var e = function(g, k) {
     return utils.encodeBFPs(utils.merge(safejson.parse(g), k, d));
-  }, f = a.get("branch_session", !1) || {};
+  }, f = a.get("branch_session", !1) || "{}";
   a.set("branch_session", goog.json.serialize(e(f, b)));
-  c && (c = a.get("branch_session_first", !0) || {}, a.set("branch_session_first", goog.json.serialize(e(c, b)), !0));
+  c && (c = a.get("branch_session_first", !0) || "{}", a.set("branch_session_first", goog.json.serialize(e(c, b)), !0));
 }};
 // Input 11
 var banner_html = {banner:function(a, b) {

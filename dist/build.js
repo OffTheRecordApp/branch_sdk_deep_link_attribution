@@ -812,21 +812,21 @@ goog.createTrustedTypesPolicy = function(a) {
   goog.Dependency.call(this, a, b, c, d, e);
 }, goog.inherits(goog.Es6ModuleDependency, goog.Dependency), goog.Es6ModuleDependency.prototype.load = function(a) {
   function b(l, m) {
-    var q = "", r = goog.getScriptNonce_();
-    r && (q = ' nonce="' + r + '"');
-    l = m ? '<script type="module" crossorigin' + q + ">" + m + "\x3c/script>" : '<script type="module" crossorigin src="' + l + '"' + q + ">\x3c/script>";
+    var p = "", r = goog.getScriptNonce_();
+    r && (p = ' nonce="' + r + '"');
+    l = m ? '<script type="module" crossorigin' + p + ">" + m + "\x3c/script>" : '<script type="module" crossorigin src="' + l + '"' + p + ">\x3c/script>";
     d.write(goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createHTML(l) : l);
   }
   function c(l, m) {
-    var q = d.createElement("script");
-    q.defer = !0;
-    q.async = !1;
-    q.type = "module";
-    q.setAttribute("crossorigin", !0);
+    var p = d.createElement("script");
+    p.defer = !0;
+    p.async = !1;
+    p.type = "module";
+    p.setAttribute("crossorigin", !0);
     var r = goog.getScriptNonce_();
-    r && (q.nonce = r);
-    m ? q.text = goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createScript(m) : m : q.src = goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createScriptURL(l) : l;
-    d.head.appendChild(q);
+    r && (p.nonce = r);
+    m ? p.text = goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createScript(m) : m : p.src = goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createScriptURL(l) : l;
+    d.head.appendChild(p);
   }
   if (goog.global.CLOSURE_IMPORT_SCRIPT) {
     goog.global.CLOSURE_IMPORT_SCRIPT(this.path) ? a.loaded() : a.pause();
@@ -893,9 +893,9 @@ goog.createTrustedTypesPolicy = function(a) {
     var l = goog.global.document, m = goog.Dependency.registerCallback_(function() {
       goog.Dependency.unregisterCallback_(m);
       c();
-    }), q = goog.getScriptNonce_();
-    q = "<script" + (q ? ' nonce="' + q + '"' : "") + ">" + goog.protectScriptTag_('goog.Dependency.callback_("' + m + '");') + "\x3c/script>";
-    l.write(goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createHTML(q) : q);
+    }), p = goog.getScriptNonce_();
+    p = "<script" + (p ? ' nonce="' + p + '"' : "") + ">" + goog.protectScriptTag_('goog.Dependency.callback_("' + m + '");') + "\x3c/script>";
+    l.write(goog.TRUSTED_TYPES_POLICY_ ? goog.TRUSTED_TYPES_POLICY_.createHTML(p) : p);
   }
   var e = this;
   if (goog.global.CLOSURE_IMPORT_SCRIPT) {
@@ -1964,7 +1964,7 @@ Server.prototype.XHRRequest = function(a, b, c, d, e, f, g) {
         } else {
           try {
             m = safejson.parse(l.responseText);
-          } catch (q) {
+          } catch (p) {
             m = {};
           }
         }
@@ -2000,16 +2000,16 @@ Server.prototype.request = function(a, b, c, d) {
     h = f.url, k = f.data;
   }
   var l = c.get("use_jsonp") || a.jsonp ? b : k;
-  var m = utils.retries, q = function(p, t, u) {
+  var m = utils.retries, p = function(q, t, u) {
     if ("function" === typeof e.onAPIResponse) {
-      e.onAPIResponse(h, a.method, l, p, u, t);
+      e.onAPIResponse(h, a.method, l, q, u, t);
     }
-    p && 0 < m && "5" === (u || "").toString().substring(0, 1) ? (m--, window.setTimeout(function() {
+    q && 0 < m && "5" === (u || "").toString().substring(0, 1) ? (m--, window.setTimeout(function() {
       n();
-    }, utils.retry_delay)) : d(p, t);
+    }, utils.retry_delay)) : d(q, t);
   };
   if (utils.userPreferences.trackingDisabled && utils.userPreferences.shouldBlockRequest(h, b)) {
-    return utils.userPreferences.allowErrorsInCallback ? q(Error(utils.messages.trackingDisabled), null, 300) : q(null, {}, 200);
+    return utils.userPreferences.allowErrorsInCallback ? p(Error(utils.messages.trackingDisabled), null, 300) : p(null, {}, 200);
   }
   var r = !1;
   if ("/v1/qr-code" === a.endpoint) {
@@ -2017,7 +2017,7 @@ Server.prototype.request = function(a, b, c, d) {
     var w = "arraybuffer";
   }
   var n = function() {
-    c.get("use_jsonp") || a.jsonp ? e.jsonpRequest(h, b, a.method, q) : e.XHRRequest(h, k, a.method, c, q, r, w);
+    c.get("use_jsonp") || a.jsonp ? e.jsonpRequest(h, b, a.method, p) : e.XHRRequest(h, k, a.method, c, p, r, w);
   };
   n();
 };
@@ -2131,7 +2131,14 @@ var session = {get:function(a, b) {
   }
 }, patch:function(a, b, c, d) {
   var e = function(g, k) {
-    return utils.encodeBFPs(utils.merge(safejson.parse(g), k, d));
+    var h = utils, l = h.encodeBFPs, m = utils, p = m.merge;
+    try {
+      var r = safejson.parse(g);
+      var w = r && "object" === typeof r ? r : {};
+    } catch (n) {
+      w = {};
+    }
+    return l.call(h, p.call(m, w, k, d));
   }, f = a.get("branch_session", !1) || "{}";
   a.set("branch_session", goog.json.serialize(e(f, b)));
   c && (c = a.get("branch_session_first", !0) || "{}", a.set("branch_session_first", goog.json.serialize(e(c, b)), !0));
@@ -2232,9 +2239,9 @@ var banner = function(a, b, c, d) {
       });
     }
     m = banner_utils.getBodyStyle("margin-top");
-    var q = banner_utils.getBodyStyle("margin-bottom");
+    var p = banner_utils.getBodyStyle("margin-bottom");
     banner_utils.addClass(document.body, "branch-banner-is-active");
-    "top" === b.position ? document.body.style.marginTop = banner_utils.addCSSLengths(banner_utils.bannerHeight, m) : "bottom" === b.position && (document.body.style.marginBottom = banner_utils.addCSSLengths(banner_utils.bannerHeight, q));
+    "top" === b.position ? document.body.style.marginTop = banner_utils.addCSSLengths(banner_utils.bannerHeight, m) : "bottom" === b.position && (document.body.style.marginBottom = banner_utils.addCSSLengths(banner_utils.bannerHeight, p));
     if (m = h.getElementById("branch-banner-close")) {
       m.onclick = function(r) {
         r.preventDefault();
@@ -2524,7 +2531,7 @@ journeys_utils.finalHookups = function(a, b, c, d, e, f, g, k) {
 journeys_utils._setupDismissBehavior = function(a, b, c, d, e, f, g, k, h, l) {
   a = d.contentWindow.document.querySelectorAll(a);
   Array.prototype.forEach.call(a, function(m) {
-    m.addEventListener(l, function(q) {
+    m.addEventListener(l, function(p) {
       journeys_utils._handleJourneyDismiss(b, c, d, e, f, g, k, h);
     });
   });
@@ -2574,8 +2581,8 @@ journeys_utils._handleJourneyDismiss = function(a, b, c, d, e, f, g, k) {
     var l = function() {
       journeys_utils.branch.removeListener(l);
       var m = journeys_utils._getDismissRequestData(k, utils.dismissEventToSourceMapping[a]);
-      journeys_utils.branch._api(resources.dismiss, m, function(q, r) {
-        !q && f && f.dismissRedirect ? window.location = f.dismissRedirect : !q && "object" === typeof r && r.template && k.shouldDisplayJourney(r, null, !1) && k.displayJourney(r.template, m, m.branch_view_id || r.event_data.branch_view_data.id, r.event_data.branch_view_data, !1, r.journey_link_data);
+      journeys_utils.branch._api(resources.dismiss, m, function(p, r) {
+        !p && f && f.dismissRedirect ? window.location = f.dismissRedirect : !p && "object" === typeof r && r.template && k.shouldDisplayJourney(r, null, !1) && k.displayJourney(r.template, m, m.branch_view_id || r.event_data.branch_view_data.id, r.event_data.branch_view_data, !1, r.journey_link_data);
       });
     };
     journeys_utils.branch.addListener("branch_internal_event_didCloseJourney", l);
@@ -2726,7 +2733,7 @@ branch_view.displayJourney = function(a, b, c, d, e, f) {
     k.id = "branch-banner";
     document.body.insertBefore(k, null);
     banner_utils.addClass(k, "branch-banner-is-active");
-    var h = !1, l = b.callback_string, m = null, q = journeys_utils.branch._storage;
+    var h = !1, l = b.callback_string, m = null, p = journeys_utils.branch._storage;
     if (a) {
       var r = journeys_utils.getMetadata(a) || {};
       a = journeys_utils.tryReplaceJourneyCtaLink(a);
@@ -2736,11 +2743,11 @@ branch_view.displayJourney = function(a, b, c, d, e, f) {
       }, utils.timeout);
       window[l] = function(n) {
         window.clearTimeout(w);
-        h || (m = n, journeys_utils.finalHookups(c, g, q, m, null, r, e, branch_view));
+        h || (m = n, journeys_utils.finalHookups(c, g, p, m, null, r, e, branch_view));
       };
       renderHtmlBlob(document.body, a, b.has_app_websdk, function(n) {
         journeys_utils.banner = n;
-        null === n ? h = !0 : (journeys_utils.finalHookups(c, g, q, m, n, r, e, branch_view), utils.navigationTimingAPIEnabled && (utils.instrumentation["journey-load-time"] = utils.timeSinceNavigationStart()), document.body.removeChild(k), utils.userPreferences.trackingDisabled || e || branch_view.incrementPageviewAnalytics(d));
+        null === n ? h = !0 : (journeys_utils.finalHookups(c, g, p, m, n, r, e, branch_view), utils.navigationTimingAPIEnabled && (utils.instrumentation["journey-load-time"] = utils.timeSinceNavigationStart()), document.body.removeChild(k), utils.userPreferences.trackingDisabled || e || branch_view.incrementPageviewAnalytics(d));
       });
     } else {
       document.body.removeChild(k), utils.userPreferences.trackingDisabled || e || branch_view.incrementPageviewAnalytics(d);
@@ -2753,12 +2760,12 @@ branch_view._getPageviewRequestData = function(a, b, c, d) {
   a || (a = {});
   journeys_utils.entryAnimationDisabled = b.disable_entry_animation || !1;
   journeys_utils.exitAnimationDisabled = b.disable_exit_animation || !1;
-  var e = utils.merge({}, c._branchViewData), f = session.get(c._storage) || {}, g = f.hasOwnProperty("has_app") ? f.has_app : !1, k = f.hasOwnProperty("identity") ? f.identity : null, h = c._storage.get("journeyDismissals", !0), l = (b.user_language || utils.getBrowserLanguageCode() || "en").toLowerCase() || null, m = utils.getInitialReferrer(c._referringLink()), q = b.branch_view_id || utils.getParameterByName("_branch_view_id") || null;
+  var e = utils.merge({}, c._branchViewData), f = session.get(c._storage) || {}, g = f.hasOwnProperty("has_app") ? f.has_app : !1, k = f.hasOwnProperty("identity") ? f.identity : null, h = c._storage.get("journeyDismissals", !0), l = (b.user_language || utils.getBrowserLanguageCode() || "en").toLowerCase() || null, m = utils.getInitialReferrer(c._referringLink()), p = b.branch_view_id || utils.getParameterByName("_branch_view_id") || null;
   c = b.make_new_link ? null : utils.getClickIdAndSearchStringFromLink(c._referringLink(!0));
   e.event = d ? "dismiss" : "pageview";
   e.metadata = a;
   e = utils.addPropertyIfNotNull(e, "initial_referrer", m);
-  e = utils.addPropertyIfNotNull(e, "branch_view_id", q);
+  e = utils.addPropertyIfNotNull(e, "branch_view_id", p);
   e = utils.addPropertyIfNotNull(e, "no_journeys", b.no_journeys);
   e = utils.addPropertyIfNotNull(e, "is_iframe", utils.isIframe());
   e = utils.addPropertyIfNotNull(e, "journey_dismissals", h);
@@ -2893,9 +2900,9 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   var f = c && "undefined" !== typeof c.branch_match_id && null !== c.branch_match_id ? c.branch_match_id : null, g = f || utils.getParamValue("_branch_match_id") || utils.hashValue("r"), k = !d.identity_id;
   d._branchViewEnabled = !!d._storage.get("branch_view_enabled");
   var h = function(n) {
-    var p = {sdk:config.version, branch_key:d.branch_key}, t = session.get(d._storage) || {}, u = session.get(d._storage, !0) || {};
-    u.browser_fingerprint_id && (p._t = u.browser_fingerprint_id);
-    utils.isSafari11OrGreater() || utils.isIOSWKWebView() || d._api(resources._r, p, function(v, x) {
+    var q = {sdk:config.version, branch_key:d.branch_key}, t = session.get(d._storage) || {}, u = session.get(d._storage, !0) || {};
+    u.browser_fingerprint_id && (q._t = u.browser_fingerprint_id);
+    utils.isSafari11OrGreater() || utils.isIOSWKWebView() || d._api(resources._r, q, function(v, x) {
       v && (d.init_state_fail_code = init_state_fail_codes.BFP_NOT_FOUND, d.init_state_fail_details = v.message);
       x && (t.browser_fingerprint_id = x);
     });
@@ -2907,19 +2914,19 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   }, l = function(n) {
     k && (n.identity = d.identity);
     return n;
-  }, m = function(n, p) {
-    p && (p = e(p), utils.userPreferences.trackingDisabled || (p = l(p), session.set(d._storage, p, k)), d.init_state = init_states.INIT_SUCCEEDED, p.data_parsed = p.data && 0 !== p.data.length ? safejson.parse(p.data) : {});
+  }, m = function(n, q) {
+    q && (q = e(q), utils.userPreferences.trackingDisabled || (q = l(q), session.set(d._storage, q, k)), d.init_state = init_states.INIT_SUCCEEDED, q.data_parsed = q.data && 0 !== q.data.length ? safejson.parse(q.data) : {});
     if (n) {
-      return d.init_state = init_states.INIT_FAILED, d.init_state_fail_code || (d.init_state_fail_code = init_state_fail_codes.UNKNOWN_CAUSE, d.init_state_fail_details = n.message), a(n, p && utils.whiteListSessionData(p));
+      return d.init_state = init_states.INIT_FAILED, d.init_state_fail_code || (d.init_state_fail_code = init_state_fail_codes.UNKNOWN_CAUSE, d.init_state_fail_details = n.message), a(n, q && utils.whiteListSessionData(q));
     }
     try {
-      a(n, p && utils.whiteListSessionData(p));
+      a(n, q && utils.whiteListSessionData(q));
     } catch (u) {
     } finally {
       d.renderFinalize();
     }
     n = utils.getAdditionalMetadata();
-    (p = utils.validateParameterType(c.metadata, "object") ? c.metadata : null) && (p = utils.mergeHostedDeeplinkData(n.hosted_deeplink_data, p)) && 0 < Object.keys(p).length && (n.hosted_deeplink_data = p);
+    (q = utils.validateParameterType(c.metadata, "object") ? c.metadata : null) && (q = utils.mergeHostedDeeplinkData(n.hosted_deeplink_data, q)) && 0 < Object.keys(q).length && (n.hosted_deeplink_data = q);
     var t = branch_view._getPageviewRequestData(journeys_utils._getPageviewMetadata(c, n), c, d, !1);
     d.renderQueue(function() {
       d._api(resources.pageview, t, function(u, v) {
@@ -2927,19 +2934,19 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
         utils.userPreferences.trackingDisabled && (utils.userPreferences.allowErrorsInCallback = !0);
       });
     });
-  }, q = function() {
+  }, p = function() {
     if ("undefined" !== typeof document.hidden) {
       var n = "hidden";
-      var p = "visibilitychange";
+      var q = "visibilitychange";
     } else {
-      "undefined" !== typeof document.mozHidden ? (n = "mozHidden", p = "mozvisibilitychange") : "undefined" !== typeof document.msHidden ? (n = "msHidden", p = "msvisibilitychange") : "undefined" !== typeof document.webkitHidden && (n = "webkitHidden", p = "webkitvisibilitychange");
+      "undefined" !== typeof document.mozHidden ? (n = "mozHidden", q = "mozvisibilitychange") : "undefined" !== typeof document.msHidden ? (n = "msHidden", q = "msvisibilitychange") : "undefined" !== typeof document.webkitHidden && (n = "webkitHidden", q = "webkitvisibilitychange");
     }
-    p && !d.changeEventListenerAdded && (d.changeEventListenerAdded = !0, document.addEventListener(p, function() {
+    q && !d.changeEventListenerAdded && (d.changeEventListenerAdded = !0, document.addEventListener(q, function() {
       document[n] || (h(null), "function" === typeof d._deepviewRequestForReplay && d._deepviewRequestForReplay());
     }, !1));
   };
   if (b && b.session_id && !g && !utils.getParamValue("branchify_url")) {
-    session.update(d._storage, {data:""}), session.update(d._storage, {referring_link:""}), q(), h(m);
+    session.update(d._storage, {data:""}), session.update(d._storage, {referring_link:""}), p(), h(m);
   } else {
     b = {sdk:config.version, branch_key:d.branch_key};
     var r = session.get(d._storage, !0) || {};
@@ -2948,21 +2955,21 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
     var w = parseInt(utils.getParamValue("[?&]_open_delay_ms"), 10);
     utils.isSafari11OrGreater() || utils.isIOSWKWebView() ? utils.delay(function() {
       d._api(resources.open, {link_identifier:g, browser_fingerprint_id:g || r.browser_fingerprint_id, alternative_browser_fingerprint_id:r.browser_fingerprint_id, options:c, initial_referrer:utils.getInitialReferrer(d._referringLink()), current_url:utils.getCurrentUrl(), screen_height:utils.getScreenHeight(), screen_width:utils.getScreenWidth(), model:utils.userAgentData ? utils.userAgentData.model : null, os_version:utils.userAgentData ? utils.userAgentData.platformVersion : null}, function(n, 
-      p) {
+      q) {
         n && (d.init_state_fail_code = init_state_fail_codes.OPEN_FAILED, d.init_state_fail_details = n.message);
-        n || "object" !== typeof p || (p.branch_view_enabled && (d._branchViewEnabled = !!p.branch_view_enabled, d._storage.set("branch_view_enabled", d._branchViewEnabled)), g && (p.click_id = g));
-        q();
-        m(n, p);
+        n || "object" !== typeof q || (q.branch_view_enabled && (d._branchViewEnabled = !!q.branch_view_enabled, d._storage.set("branch_view_enabled", d._branchViewEnabled)), g && (q.click_id = g));
+        p();
+        m(n, q);
       });
-    }, w) : d._api(resources._r, b, function(n, p) {
+    }, w) : d._api(resources._r, b, function(n, q) {
       if (n) {
         return d.init_state_fail_code = init_state_fail_codes.BFP_NOT_FOUND, d.init_state_fail_details = n.message, m(n, null);
       }
       utils.delay(function() {
-        d._api(resources.open, {link_identifier:g, browser_fingerprint_id:g || p, alternative_browser_fingerprint_id:r.browser_fingerprint_id, options:c, initial_referrer:utils.getInitialReferrer(d._referringLink()), current_url:utils.getCurrentUrl(), screen_height:utils.getScreenHeight(), screen_width:utils.getScreenWidth(), model:utils.userAgentData ? utils.userAgentData.model : null, os_version:utils.userAgentData ? utils.userAgentData.platformVersion : null}, function(t, u) {
+        d._api(resources.open, {link_identifier:g, browser_fingerprint_id:g || q, alternative_browser_fingerprint_id:r.browser_fingerprint_id, options:c, initial_referrer:utils.getInitialReferrer(d._referringLink()), current_url:utils.getCurrentUrl(), screen_height:utils.getScreenHeight(), screen_width:utils.getScreenWidth(), model:utils.userAgentData ? utils.userAgentData.model : null, os_version:utils.userAgentData ? utils.userAgentData.platformVersion : null}, function(t, u) {
           t && (d.init_state_fail_code = init_state_fail_codes.OPEN_FAILED, d.init_state_fail_details = t.message);
           t || "object" !== typeof u || (u.branch_view_enabled && (d._branchViewEnabled = !!u.branch_view_enabled, d._storage.set("branch_view_enabled", d._branchViewEnabled)), g && (u.click_id = g));
-          q();
+          p();
           m(t, u);
         });
       }, w);

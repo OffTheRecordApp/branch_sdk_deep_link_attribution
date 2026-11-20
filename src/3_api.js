@@ -252,6 +252,8 @@
 		function onError() {
 			// This occurs for all errors from these endpoints (/_r and /v1/deepview),
 			// including 5xx and no connectivity.
+			window.clearTimeout(timeoutTrigger);
+			delete window[callbackString];
 			callback(new Error(utils.messages.blockedByClient), null);
 		},
 		function onLoad() {

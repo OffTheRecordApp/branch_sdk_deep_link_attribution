@@ -29,11 +29,10 @@ describe('Server - jsonp request blocked by client', function() {
 		'(function(goog) {\n' + fs.readFileSync(apiFile, 'utf8') + '\nreturn Server;\n})',
 		{ filename: apiFile, lineOffset: -1 }
 	);
-	var Server = loadServer({
-		provide: function() { },
-		require: function() { },
-		json: goog.json
-	});
+	var serverGoog = Object.create(goog);
+	serverGoog.provide = function() { };
+	serverGoog.require = function() { };
+	var Server = loadServer(serverGoog);
 	var storage = {
 		get: function() {
 			return false;
@@ -68,5 +67,6 @@ describe('Server - jsonp request blocked by client', function() {
 			sinon.match.has('message', utils.messages.blockedByClient),
 			null
 		);
+		sinon.assert.match(window.branch_callback__0, undefined);
 	});
 });
